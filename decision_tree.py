@@ -1,18 +1,36 @@
 import nltk
 import pandas
 
-train_input = pandas.read_csv('data/train_input.csv')
+train_input = pandas.read_csv('data/clean_train_input.csv')
 train_output = pandas.read_csv('data/train_output.csv')
 test_input = pandas.read_csv('data/test_input.csv')
 #test_output = pandas.read_csv('test_output.csv')
 
+training_reserve = 0.7
 
 #Create binary features for each word in the sentence
 def word_features(sentence):
     return dict([(word, True) for word in sentence])
 
+def accuracy(classifier, test):
+    count_right=count_wrong = 0
+    for sample in test:
+        print "Prediction:",classifier.classify(sample[0]),"| Truth:",sample[1],
+        if classifier.classify(sample[0]) is sample[1]:
+            print "right"
+            count_right+=1
+        else:
+            print "wrong"
+            count_wrong +=1
+    print "Got right:",count_right, "Got wrong:",count_wrong
+    print "Accuracy: ",float(count_right)/len(test)
+    print ""
+
 train = [(word_features(nltk.word_tokenize(train_input['conversation'][i])),
-        train_output['category'][i]) for i in xrange(10)]
+        train_output['category'][i]) for i in xrange(len(train_input))]    
+   
+train_data = train[:int(len(train)*training_reserve)]
+train_test = train[int(len(train)*training_reserve):]  
 
 test = [(word_features(nltk.word_tokenize(test_input['conversation'][i]))) for i in xrange(10)]
 '''
@@ -50,9 +68,21 @@ test = [
 
 nltk.usage(nltk.classify.ClassifierI)
 #classifier = nltk.classify.NaiveBayesClassifier.train(train)
-classifier = nltk.classify.DecisionTreeClassifier.train(train, entropy_cutoff=0,support_cutoff=0)
+classifier = nltk.classify.DecisionTreeClassifier.train(train_data, entropy_cutoff=0,support_cutoff=0)
 
-sorted(classifier.labels())
+print sorted(classifier.labels())
 
-print classifier.classify_many(test)
+#print classifier.classify_many(test)
 print (classifier)
+
+accuracy(classifier,train_test)
+
+
+
+def entropy(data, attribute):
+    attribute_entropy = 0.0
+    value_frequency = {}
+
+    for sample in data:
+        #if value_frequency.has_key(sample)
+        pass
