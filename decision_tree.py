@@ -1,9 +1,9 @@
 import nltk
 import pandas
 
-train_input = pandas.read_csv('train_input.csv')
-train_output = pandas.read_csv('train_output.csv')
-test_input = pandas.read_csv('test_input.csv')
+train_input = pandas.read_csv('data/train_input.csv')
+train_output = pandas.read_csv('data/train_output.csv')
+test_input = pandas.read_csv('data/test_input.csv')
 #test_output = pandas.read_csv('test_output.csv')
 
 
