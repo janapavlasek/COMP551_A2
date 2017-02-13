@@ -7,12 +7,13 @@ test_input = pandas.read_csv('data/test_input.csv')
 #test_output = pandas.read_csv('test_output.csv')
 
 
+
 #Create binary features for each word in the sentence
 def word_features(sentence):
     return dict([(word, True) for word in sentence])
 
 train = [(word_features(nltk.word_tokenize(train_input['conversation'][i])),
-        train_output['category'][i]) for i in xrange(10)]
+        train_output['category'][i]) for i in xrange(100)]
 
 test = [(word_features(nltk.word_tokenize(test_input['conversation'][i]))) for i in xrange(10)]
 '''
@@ -53,6 +54,13 @@ nltk.usage(nltk.classify.ClassifierI)
 classifier = nltk.classify.DecisionTreeClassifier.train(train, entropy_cutoff=0,support_cutoff=0)
 
 sorted(classifier.labels())
-
+import pudb; pu.db
 print classifier.classify_many(test)
 print (classifier)
+
+def entropy(data, attribute):
+    attribute_entropy = 0.0
+    value_frequency = {}
+
+    for sample in data:
+        if value_frequency.has_key(sample[])
