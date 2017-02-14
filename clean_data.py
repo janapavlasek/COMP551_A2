@@ -116,7 +116,7 @@ class CleanData(object):
         features = features.toarray()
 
         # Get output.
-        with open(in_file, 'rb') as f:
+        with open(y_file, 'rb') as f:
             reader = csv.reader(f)
             y_data = list(reader)
 
