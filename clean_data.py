@@ -24,6 +24,13 @@ class CleanData(object):
                            'politics': 5,
                            'soccer': 6,
                            'worldnews': 7}
+        # Initialize count vectorizer. Only max_features most frequent words
+        # will be analyzed.
+        self.vectorizer = CountVectorizer(analyzer="word",
+                                          tokenizer=None,
+                                          preprocessor=None,
+                                          stop_words=None,
+                                          max_features=5000)
 
     def clean_data(self, in_file, out_file=None):
         """Cleans the data.
@@ -36,38 +43,11 @@ class CleanData(object):
             reader = csv.reader(f)
             self.data = list(reader)
 
-            tokenizer = RegexpTokenizer(r'\w+')
-
             for element in self.data:
                 if element[0] == "id":
                     continue
-                # Remove the tags.
-                element[1] = re.sub(r'<.+?>', "", element[1])
 
-                # Retain only letter characters.
-                element[1] = re.sub("[^a-zA-Z]", " ", element[1])
-
-                # Strip off white space.
-                element[1] = element[1].replace("\n", "")
-
-                # Change all the characters to lower case.
-                element[1] = element[1].lower()
-
-                # Tokenize sentences.
-                element[1] = tokenizer.tokenize(element[1])
-
-                # Remove stop words.
-                element[1] = [word for word in element[1] if word not in set(stopwords.words('english'))]
-
-                # Remove single characters.
-                element[1] = [word for word in element[1] if len(word) != 1]
-
-                # Stem words.
-                snowball_stemmer = SnowballStemmer('english')
-                element[1] = [snowball_stemmer.stem(word) for word in element[1]]
-
-                # Stitch back into a string.
-                element[1] = " ".join(element[1])
+                element[1] = self.clean_post(element[1])
 
                 if int(element[0]) % 1000 == 0:
                     print "Element {} of {}".format(element[0], len(self.data))
@@ -77,6 +57,38 @@ class CleanData(object):
                 writer = csv.writer(f)
                 for row in self.data:
                     writer.writerow(row)
+
+    def clean_post(self, post):
+        # Remove the tags.
+        post = re.sub(r'<.+?>', "", post)
+
+        # Retain only letter characters.
+        post = re.sub("[^a-zA-Z]", " ", post)
+
+        # Strip off white space.
+        post = post.replace("\n", "")
+
+        # Change all the characters to lower case.
+        post = post.lower()
+
+        # Tokenize sentences.
+        tokenizer = RegexpTokenizer(r'\w+')
+        post = tokenizer.tokenize(post)
+
+        # Remove stop words.
+        post = [word for word in post if word not in set(stopwords.words('english'))]
+
+        # Remove single characters.
+        post = [word for word in post if len(word) != 1]
+
+        # Stem words.
+        snowball_stemmer = SnowballStemmer('english')
+        post = [snowball_stemmer.stem(word) for word in post]
+
+        # Stitch back into a string.
+        post = " ".join(post)
+
+        return post
 
     def bag_of_words(self, in_file=None, y_file="data/train_output.csv"):
         """Returns the bag of words training set in the form of a list of
@@ -100,19 +112,11 @@ class CleanData(object):
         # Remove the header row.
         bow_data.pop(0)
 
-        # Initialize count vectorizer. Only max_features most frequent words
-        # will be analyzed.
-        vectorizer = CountVectorizer(analyzer="word",
-                                     tokenizer=None,
-                                     preprocessor=None,
-                                     stop_words=None,
-                                     max_features=5000)
-
         # Extract just the posts from the array.
         posts = [ele[1] for ele in bow_data]
 
         # Get bag of words features.
-        features = vectorizer.fit_transform(posts)
+        features = self.vectorizer.fit_transform(posts)
         features = features.toarray()
 
         # Get output.
@@ -144,8 +148,7 @@ class CleanData(object):
         """Returns a list of lists of the data, where each sub-list is a row of
         data, by loading past results from a CSV file (so you don't need to run
         the algorithm)."""
-        if not os.path.exists(in_file):
-            print "File", in_file, "does not exist. You need to run clean_data with this path as the out_file."
+        if not self.check_existance(in_file):
             return
 
         with open(in_file, 'rb') as f:
@@ -154,8 +157,55 @@ class CleanData(object):
 
         return data
 
+    def get_y_train(self, in_file="data/train_output.csv"):
+        with open(in_file, 'rb') as f:
+            reader = csv.reader(f)
+            data = list(reader)
+
+        data = data[1:]
+
+        train_out = []
+        for element in data:
+            train_out.append((int(element[0]), self.categories[element[1]]))
+
+        return train_out
+
+    def get_x_in(self, in_file="data/clean_train_input.csv"):
+        if not self.check_existance(in_file):
+            return
+
+        with open(in_file, 'rb') as f:
+            reader = csv.reader(f)
+            data = list(reader)
+
+        # Remove the header row.
+        data.pop(0)
+
+        # Extract just the posts from the array.
+        posts = [ele[1] for ele in data]
+
+        # Get bag of words features.
+        features = self.vectorizer.transform(posts)
+        features = features.toarray()
+
+        bow = []
+
+        # Put the data in the correct form.
+        for i, row in enumerate(features):
+            bow.append((i, row))
+
+        return bow
+
+    def check_existance(self, path):
+        if not os.path.exists(path):
+            print "File", path, "does not exist. You need to run clean_data with this path as the out_file."
+            return False
+
+        return True
+
 
 if __name__ == '__main__':
     cd = CleanData()
     # cd.clean_data("data/train_input.csv", out_file="data/clean_train_input.csv")
+    # cd.clean_data("data/test_input.csv", out_file="data/clean_test_input.csv")
     print cd.bag_of_words(in_file="data/clean_train_input.csv")[0:5]
