@@ -14,8 +14,9 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 class CleanData(object):
     """Cleans the given data into a usable form."""
-    def __init__(self, max_features=5000, tfidf=False):
+    def __init__(self, max_features=5000, tfidf=False, max_train_size=None):
         self.data = []
+        self.max_train_size = max_train_size
         self.categories = {'hockey': 0,
                            'movies': 1,
                            'nba': 2,
@@ -97,7 +98,7 @@ class CleanData(object):
 
         return post
 
-    def bag_of_words(self, in_file=None, y_file="data/train_output.csv", max_train_size=None):
+    def bag_of_words(self, in_file=None, y_file="data/train_output.csv"):
         """Returns the bag of words training set in the form of a list of
         tuples, with tuples of the form:
             (ID, [features], category).
@@ -120,8 +121,8 @@ class CleanData(object):
         bow_data.pop(0)
 
         # Limit the number of training examples if necessary.
-        if max_train_size is not None:
-            bow_data = bow_data[0:max_train_size]
+        if self.max_train_size is not None:
+            bow_data = bow_data[0:self.max_train_size]
 
         # Extract just the posts from the array.
         posts = [ele[1] for ele in bow_data]
@@ -173,7 +174,11 @@ class CleanData(object):
             reader = csv.reader(f)
             data = list(reader)
 
-        data = data[1:]
+        data.pop(0)
+
+        # Limit the number of training examples if necessary.
+        if self.max_train_size is not None:
+            data = data[0:self.max_train_size]
 
         train_out = []
         for element in data:
