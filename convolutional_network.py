@@ -10,7 +10,7 @@ from collections import OrderedDict
 
 
 max_features = 5000
-train_time = 7
+train_time = 1
 num_batches = 1000
 training_reserve = 0.8
 
@@ -51,9 +51,9 @@ def create_network(shape=(None,1,max_features),input_var=T.tensor3()):
 	network = lasagne.layers.MaxPool1DLayer(network,pool_size=(2))
 	print '	',lasagne.layers.get_output_shape(network)
 
-	network = lasagne.layers.Conv1DLayer(network, num_filters=80, filter_size=(5), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
-	network = lasagne.layers.MaxPool1DLayer(network,pool_size=(2))
-	print '	',lasagne.layers.get_output_shape(network)
+	#network = lasagne.layers.Conv1DLayer(network, num_filters=80, filter_size=(5), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
+	#network = lasagne.layers.MaxPool1DLayer(network,pool_size=(2))
+	#print '	',lasagne.layers.get_output_shape(network)
 
 	#network = lasagne.layers.DenseLayer(network,num_units=400,nonlinearity=lasagne.nonlinearities.rectify)
 	#print '	',lasagne.layers.get_output_shape(network)
@@ -71,8 +71,8 @@ train_data = cd.bag_of_words(in_file='./data/clean_train_input.csv')
 
 X = numpy.array([x[1] for x in train_data],dtype='float32')
 y = numpy.array([y[2] for y in train_data],dtype='float32')
-#X = X[:100000]
-#y = y[:100000]
+X = X[:10000]
+y = y[:10000]
 new_y = numpy.array([numpy.zeros(8)])
 for categ in y:
 	temp = numpy.array([numpy.zeros(8)])
