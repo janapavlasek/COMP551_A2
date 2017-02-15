@@ -117,7 +117,7 @@ class NaiveBayes(object):
 
 
 if __name__ == '__main__':
-    cd = CleanData()
+    cd = CleanData(tfidf=True)
 
     print "Getting the training data."
     training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
@@ -146,12 +146,7 @@ if __name__ == '__main__':
     out = nb.classify(test_data)
     print "Done classifying."
 
-    with open("data/test_input.csv", "r") as f:
-        reader = csv.reader(f)
-        data = list(reader)
-
-    data.pop(0)
-
+    print "Creating and saving the results."
     results = [["id", "conversation", "category"]]
     categories = ['hockey',
                   'movies',
@@ -162,14 +157,12 @@ if __name__ == '__main__':
                   'soccer',
                   'worldnews']
 
-    print "Creating and saving the results."
     for element in out:
-        try:
-            results.append([element[0], data[element[0]][1], categories[element[1]]])
-        except Exception as e:
-            print e, element[0]
+        results.append([element[0], categories[element[1]]])
 
-    with open("results/naive_bayes_results.csv", "w") as f:
+    with open("results/naive_bayes_tfidf_results.csv", "w") as f:
         writer = csv.writer(f)
         for row in results:
             writer.writerow(row)
+
+    print "Completed successfully."

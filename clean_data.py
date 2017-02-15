@@ -5,7 +5,7 @@ import csv
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 # Uncomment if you haven't downloaded NLTK data yet.
 # import nltk
@@ -14,7 +14,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 class CleanData(object):
     """Cleans the given data into a usable form."""
-    def __init__(self):
+    def __init__(self, max_features=5000, tfidf=False):
         self.data = []
         self.categories = {'hockey': 0,
                            'movies': 1,
@@ -26,11 +26,18 @@ class CleanData(object):
                            'worldnews': 7}
         # Initialize count vectorizer. Only max_features most frequent words
         # will be analyzed.
-        self.vectorizer = CountVectorizer(analyzer="word",
-                                          tokenizer=None,
-                                          preprocessor=None,
-                                          stop_words=None,
-                                          max_features=5000)
+        if not tfidf:
+            self.vectorizer = CountVectorizer(analyzer="word",
+                                              tokenizer=None,
+                                              preprocessor=None,
+                                              stop_words=None,
+                                              max_features=max_features)
+        else:
+            self.vectorizer = TfidfVectorizer(analyzer="word",
+                                              tokenizer=None,
+                                              preprocessor=None,
+                                              stop_words=None,
+                                              max_features=max_features)
 
     def clean_data(self, in_file, out_file=None):
         """Cleans the data.
