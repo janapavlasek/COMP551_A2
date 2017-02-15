@@ -71,8 +71,8 @@ train_data = cd.bag_of_words(in_file='./data/clean_train_input.csv')
 
 X = numpy.array([x[1] for x in train_data],dtype='float32')
 y = numpy.array([y[2] for y in train_data],dtype='float32')
-X = X[:100000]
-y = y[:100000]
+#X = X[:100000]
+#y = y[:100000]
 new_y = numpy.array([numpy.zeros(8)])
 for categ in y:
 	temp = numpy.array([numpy.zeros(8)])
