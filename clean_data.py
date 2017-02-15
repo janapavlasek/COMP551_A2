@@ -97,7 +97,7 @@ class CleanData(object):
 
         return post
 
-    def bag_of_words(self, in_file=None, y_file="data/train_output.csv"):
+    def bag_of_words(self, in_file=None, y_file="data/train_output.csv", max_train_size=None):
         """Returns the bag of words training set in the form of a list of
         tuples, with tuples of the form:
             (ID, [features], category).
@@ -118,6 +118,10 @@ class CleanData(object):
 
         # Remove the header row.
         bow_data.pop(0)
+
+        # Limit the number of training examples if necessary.
+        if max_train_size is not None:
+            bow_data = bow_data[0:max_train_size]
 
         # Extract just the posts from the array.
         posts = [ele[1] for ele in bow_data]
