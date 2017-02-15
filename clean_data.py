@@ -170,7 +170,7 @@ class CleanData(object):
 
         return train_out
 
-    def get_x_in(self, in_file="data/clean_train_input.csv"):
+    def get_x_in(self, in_file="data/clean_test_input.csv"):
         if not self.check_existance(in_file):
             return
 

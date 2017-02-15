@@ -134,11 +134,17 @@ if __name__ == '__main__':
     expect = cd.get_y_train()
     print "Training error:", nb.compute_error(out, expect)
 
+    del out
+    del expect
+    del training_data
+
     print "Getting the testing data."
     test_data = cd.get_x_in()
     print "Done collecting data."
 
+    print "Classifying the testing data."
     out = nb.classify(test_data)
+    print "Done classifying."
 
     with open("data/test_input.csv", "r") as f:
         reader = csv.reader(f)
@@ -147,17 +153,21 @@ if __name__ == '__main__':
     data.pop(0)
 
     results = [["id", "conversation", "category"]]
-    categories = {0: 'hockey',
-                  1: 'movies',
-                  2: 'nba',
-                  3: 'news',
-                  4: 'nfl',
-                  5: 'politics',
-                  6: 'soccer',
-                  7: 'worldnews'}
+    categories = ['hockey',
+                  'movies',
+                  'nba',
+                  'news',
+                  'nfl',
+                  'politics',
+                  'soccer',
+                  'worldnews']
 
+    print "Creating and saving the results."
     for element in out:
-        results.append([data[element[0]][0], data[element[0]][1], categories[element[1]]])
+        try:
+            results.append([element[0], data[element[0]][1], categories[element[1]]])
+        except Exception as e:
+            print e, element[0]
 
     with open("results/naive_bayes_results.csv", "w") as f:
         writer = csv.writer(f)
