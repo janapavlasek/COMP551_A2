@@ -2,7 +2,9 @@
 
 import csv
 import numpy as np
+import matplotlib.pyplot as plt
 from clean_data import CleanData
+from sklearn.cross_validation import train_test_split
 
 
 class NaiveBayes(object):
@@ -12,14 +14,14 @@ class NaiveBayes(object):
         self.feature_probs = None  # Relative probability of each feature for a given class.
         self.N = None  # Number of samples.
 
-    def train(self, train_data):
+    def train(self, X, y):
         """Trains the Naive Bayes classifier by learning the
         distributions of each feature."""
-        self.N = len(train_data)
+        self.N = len(y)
 
         # This will be an array where each row represents values for each
         # class, and the columns within the row are the P(x | c).
-        probs = np.zeros((8, len(train_data[0][1])))
+        probs = np.zeros((8, X.shape[1]))
 
         # There are 8 classes. The index of the element corresponds to the
         # class number.
@@ -27,10 +29,10 @@ class NaiveBayes(object):
 
         # Count the number of times each class appears. At the same time, for
         # that class, count the number of times a word appears.
-        for element in train_data:
-            class_freq[element[2]] += 1
-            for i, word in enumerate(element[1]):
-                probs[element[2], i] += word
+        for i in range(0, len(y)):
+            class_freq[int(y[i])] += 1
+            for j in range(0, X.shape[1]):
+                probs[int(y[i]), j] += X[i, j]
 
         # Transform the frequencies into log probabilities by dividing instance
         # appearances by total number of instances.
@@ -52,7 +54,7 @@ class NaiveBayes(object):
         for element in X:
             probs = []
             # Put the features into a useable array form.
-            x_i = np.matrix(element[1]).T
+            x_i = np.matrix(element).T
             # Iterate through each class and find the probability that the
             # given feature array represents an element of that class.
             for i in range(0, 8):
@@ -63,7 +65,7 @@ class NaiveBayes(object):
                 probs.append(prob)
 
             # The result is the class with the highest probability.
-            results.append((element[0], np.argmax(probs)))
+            results.append(np.argmax(probs))
 
         return results
 
@@ -82,64 +84,151 @@ class NaiveBayes(object):
 
         count = 0
         for i in range(0, len(Y)):
-            if Y[i][1] != Y_expect[i][1]:
+            if Y[i] != Y_expect[i]:
                 count += 1
 
         return count / float(len(Y))
 
-    def compute_confusion(self, Y, Y_expect):
-        """Returns the confusion matrix.
 
-        Args:
-            Y: The calculated output.
-            Y_expect: The desired output.
-        """
-        if Y.shape != Y_expect.shape:
-            print("Matrices must be the same size.")
-            return
+def get_numpy_matrices(training_data):
+    y_train = np.zeros(len(training_data))
+    X_train = np.zeros((len(training_data), len(training_data[0][1])))
+    ids = []
 
-        # Initialize confusion matrix of the form:
-        #     [m_00, m_01]
-        #     [m_10, m_11]
-        confusion = np.zeros((2, 2))
+    idx = 0
+    while not len(training_data) == 0:
+        ids.append(training_data[0][1])
+        y_train[idx] = training_data[0][2]
+        X_train[idx] = training_data.pop(0)[1]
+        idx += 1
 
-        for i in range(0, len(Y)):
-            if Y[i] == 0 and Y_expect[i] == 0:    # True -ve
-                confusion[0, 0] += 1
-            elif Y[i] == 1 and Y_expect[i] == 0:  # False +ve
-                confusion[0, 1] += 1
-            elif Y[i] == 0 and Y_expect[i] == 1:  # False -ve
-                confusion[1, 0] += 1
-            elif Y[i] == 1 and Y_expect[i] == 1:  # True +ve
-                confusion[1, 1] += 1
-
-        return confusion
+    return ids, X_train, y_train
 
 
-if __name__ == '__main__':
-    cd = CleanData(tfidf=True)
+def plot_max_train_size(num_iter):
+    points = [10, 50, 100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000,
+              8000, 9000, 10000, 15000, 30000]
+    errors = []
+    train_errors = []
 
-    print "Getting the training data."
-    training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
-    print "Done collecting data."
+    for point in points:
+        print "Testing for point", point, "training examples."
+        error = 0
+        train_error = 0
+        for i in range(0, num_iter):
+            cd = CleanData(tfidf=True, max_train_size=int(point / 0.6))
 
-    nb = NaiveBayes()
-    print "Training Naive Bayes classifier."
-    nb.train(training_data)
-    print "Done training."
+            try:
+                print "Getting the training data."
+                training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
 
-    print "Classifying training input."
-    out = nb.classify(training_data)
+                ids, X, y = get_numpy_matrices(training_data)
 
-    expect = cd.get_y_train()
-    print "Training error:", nb.compute_error(out, expect)
+                del training_data
 
-    del out
-    del expect
-    del training_data
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
 
+                del X, y, ids
+
+                nb = NaiveBayes()
+                nb.train(X_train, y_train)
+
+                out = nb.classify(X_test)
+                error += nb.compute_error(out, y_test)
+
+                train_out = nb.classify(X_train)
+                train_error += nb.compute_error(train_out, y_train)
+            except MemoryError:
+                print "Memory error. Continuing."
+                continue
+
+            del X_train, X_test, y_train, y_test
+
+        errors.append(error / num_iter)
+        train_errors.append(train_error / num_iter)
+
+    print errors
+    print train_errors
+
+    # PLOT.
+    plt.figure(1)
+
+    plt.title("Error vs Training Examples")
+    plt.xlabel("Number of training examples")
+    plt.ylabel("Error")
+    plt.xscale('log')
+    plt.plot(points, errors, '-ro')
+    plt.plot(points, train_errors, '-bo')
+    plt.show()
+
+
+def plot_feature_size(num_iter):
+    points = [100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000,
+              8000, 9000, 10000]
+    errors = []
+    train_errors = []
+
+    for point in points:
+        print "Testing for point", point, "features."
+        error = 0
+        train_error = 0
+        for i in range(0, num_iter):
+            cd = CleanData(tfidf=True, max_train_size=25000, max_features=point)
+
+            try:
+                print "Getting the training data."
+                training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
+
+                ids, X, y = get_numpy_matrices(training_data)
+
+                del training_data
+
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
+
+                del X, y, ids
+
+                nb = NaiveBayes()
+                nb.train(X_train, y_train)
+
+                out = nb.classify(X_test)
+                error += nb.compute_error(out, y_test)
+
+                train_out = nb.classify(X_train)
+                train_error += nb.compute_error(train_out, y_train)
+            except MemoryError:
+                print "Memory error. Continuing."
+                continue
+
+            del X_train, X_test, y_train, y_test
+
+        errors.append(error / num_iter)
+        train_errors.append(train_error / num_iter)
+
+    print errors
+    print train_errors
+
+    # PLOT.
+    plt.figure(2)
+
+    plt.title("Error vs Features")
+    plt.xlabel("Number of features")
+    plt.ylabel("Error")
+    # plt.xscale('log')
+    plt.plot(points, errors, '-ro')
+    plt.plot(points, train_errors, '-bo')
+    plt.show()
+
+
+def classify_test_data(cd, nb, results_file):
     print "Getting the testing data."
     test_data = cd.get_x_in()
+
+    X_test = np.zeros((len(test_data), len(test_data[0][1])))
+    idx = 0
+    while not len(test_data) == 0:
+        X_test[idx] = test_data.pop(0)[1]
+        idx += 1
+
     print "Done collecting data."
 
     print "Classifying the testing data."
@@ -160,9 +249,53 @@ if __name__ == '__main__':
     for element in out:
         results.append([element[0], categories[element[1]]])
 
-    with open("results/naive_bayes_tfidf_results.csv", "w") as f:
+    with open(results_file, "w") as f:
         writer = csv.writer(f)
         for row in results:
             writer.writerow(row)
+
+
+def train_naive_bayes(cd, nb):
+    print "Getting the training data."
+    training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
+
+    y_train = np.zeros(len(training_data))
+    X_train = np.zeros((len(training_data), len(training_data[0][1])))
+
+    idx = 0
+    while not len(training_data) == 0:
+        y_train[idx] = training_data[0][2]
+        X_train[idx] = training_data.pop(0)[1]
+        idx += 1
+
+    del training_data
+
+    print "Done collecting data."
+
+    print "Training Naive Bayes classifier."
+    nb.train(X_train, y_train)
+    print "Done training."
+
+    print "Classifying training input."
+    out = nb.classify(X_train)
+
+    print "Training error:", nb.compute_error(out, y_train)
+
+    # Clean up unused arrays.
+    del out
+    del y_train
+    del X_train
+
+
+if __name__ == '__main__':
+    cd = CleanData(tfidf=True, max_train_size=15000, max_features=7000)
+    nb = NaiveBayes()
+
+    train_naive_bayes(cd, nb)
+
+    # Classify the test data.
+    classify_test_data(cd, nb, "results/naive_bayes_final_results.csv")
+    # plot_max_train_size(3)
+    # plot_feature_size(3)
 
     print "Completed successfully."

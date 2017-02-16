@@ -2,6 +2,7 @@
 import re
 import os
 import csv
+from random import shuffle
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
@@ -120,6 +121,9 @@ class CleanData(object):
         # Remove the header row.
         bow_data.pop(0)
 
+        # Shuffle the data.
+        shuffle(bow_data)
+
         # Limit the number of training examples if necessary.
         if self.max_train_size is not None:
             bow_data = bow_data[0:self.max_train_size]
@@ -143,7 +147,7 @@ class CleanData(object):
 
         # Put the data in the correct form.
         for i, row in enumerate(features):
-            bow.append((i, row, self.categories[y_data[i][1]]))
+            bow.append((int(bow_data[i][0]), row, self.categories[y_data[int(bow_data[i][0])][1]]))
 
         return bow
 
@@ -168,23 +172,6 @@ class CleanData(object):
             data = list(reader)
 
         return data
-
-    def get_y_train(self, in_file="data/train_output.csv"):
-        with open(in_file, 'rb') as f:
-            reader = csv.reader(f)
-            data = list(reader)
-
-        data.pop(0)
-
-        # Limit the number of training examples if necessary.
-        if self.max_train_size is not None:
-            data = data[0:self.max_train_size]
-
-        train_out = []
-        for element in data:
-            train_out.append((int(element[0]), self.categories[element[1]]))
-
-        return train_out
 
     def get_x_in(self, in_file="data/clean_test_input.csv"):
         if not self.check_existance(in_file):
