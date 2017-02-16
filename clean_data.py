@@ -15,7 +15,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 class CleanData(object):
     """Cleans the given data into a usable form."""
-    def __init__(self, max_features=5000, tfidf=False, max_train_size=None):
+    def __init__(self, max_features=5000, tfidf=False, max_train_size=None, n_grams=1):
         self.data = []
         self.max_train_size = max_train_size
         self.categories = {'hockey': 0,
@@ -33,13 +33,15 @@ class CleanData(object):
                                               tokenizer=None,
                                               preprocessor=None,
                                               stop_words=None,
-                                              max_features=max_features)
+                                              max_features=max_features,
+                                              ngram_range=(1, n_grams))
         else:
             self.vectorizer = TfidfVectorizer(analyzer="word",
                                               tokenizer=None,
                                               preprocessor=None,
                                               stop_words=None,
-                                              max_features=max_features)
+                                              max_features=max_features,
+                                              ngram_range=(1, n_grams))
 
     def clean_data(self, in_file, out_file=None):
         """Cleans the data.
