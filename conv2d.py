@@ -13,7 +13,7 @@ max_features = 5000
 train_time = 1
 num_batches = 10
 training_reserve = 0.8
-subset = 10000           #max number of sample conversations
+subset = 100           #max number of sample conversations
 max_length = 400         #max string length
 
 def create_trainer(network,input_var,y):
