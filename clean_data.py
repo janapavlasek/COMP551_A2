@@ -101,7 +101,7 @@ class CleanData(object):
 
         return post
 
-    def bag_of_words(self, in_file=None, y_file="data/train_output.csv"):
+    def bag_of_words(self, in_file=None, y_file="data/train_output.csv", sparse=False):
         """Returns the bag of words training set in the form of a list of
         tuples, with tuples of the form:
             (ID, [features], category).
@@ -135,7 +135,9 @@ class CleanData(object):
 
         # Get bag of words features.
         features = self.vectorizer.fit_transform(posts)
-        features = features.toarray()
+
+        if not sparse:
+            features = features.toarray()
 
         # Get output.
         with open(y_file, 'rb') as f:
@@ -146,10 +148,15 @@ class CleanData(object):
         y_data.pop(0)
 
         bow = []
+        y = []
 
         # Put the data in the correct form.
         for i, row in enumerate(features):
+            y.append(self.categories[y_data[int(bow_data[i][0])][1]])
             bow.append((int(bow_data[i][0]), row, self.categories[y_data[int(bow_data[i][0])][1]]))
+
+        if sparse:
+            return features, y
 
         return bow
 
@@ -175,7 +182,7 @@ class CleanData(object):
 
         return data
 
-    def get_x_in(self, in_file="data/clean_test_input.csv"):
+    def get_x_in(self, in_file="data/clean_test_input.csv", sparse=False):
         if not self.check_existance(in_file):
             return
 
@@ -191,6 +198,10 @@ class CleanData(object):
 
         # Get bag of words features.
         features = self.vectorizer.transform(posts)
+
+        if sparse:
+            return features
+
         features = features.toarray()
 
         bow = []

@@ -106,7 +106,7 @@ def get_numpy_matrices(training_data):
 
 
 def plot_max_train_size(num_iter):
-    points = [10, 50, 100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000,
+    points = [5000, 6000, 7000,   # 10, 50, 100, 500, 1000, 2000, 3000, 4000,
               8000, 9000, 10000, 15000, 30000]
     errors = []
     train_errors = []
@@ -119,7 +119,6 @@ def plot_max_train_size(num_iter):
             cd = CleanData(tfidf=True, max_train_size=int(point / 0.6))
 
             try:
-                print "Getting the training data."
                 training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
 
                 ids, X, y = get_numpy_matrices(training_data)
@@ -144,6 +143,7 @@ def plot_max_train_size(num_iter):
 
             del X_train, X_test, y_train, y_test
 
+        print "Training:", train_error / num_iter, "Validation:", error / num_iter
         errors.append(error / num_iter)
         train_errors.append(train_error / num_iter)
 
@@ -176,7 +176,6 @@ def plot_feature_size(num_iter):
             cd = CleanData(tfidf=True, max_train_size=25000, max_features=point)
 
             try:
-                print "Getting the training data."
                 training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
 
                 ids, X, y = get_numpy_matrices(training_data)
@@ -224,19 +223,22 @@ def classify_test_data(cd, nb, results_file):
     test_data = cd.get_x_in()
 
     X_test = np.zeros((len(test_data), len(test_data[0][1])))
+    ids = []
+
     idx = 0
     while not len(test_data) == 0:
+        ids.append(test_data[0][0])
         X_test[idx] = test_data.pop(0)[1]
         idx += 1
 
     print "Done collecting data."
 
     print "Classifying the testing data."
-    out = nb.classify(test_data)
+    out = nb.classify(X_test)
     print "Done classifying."
 
     print "Creating and saving the results."
-    results = [["id", "conversation", "category"]]
+    results = [["id", "category"]]
     categories = ['hockey',
                   'movies',
                   'nba',
@@ -246,8 +248,8 @@ def classify_test_data(cd, nb, results_file):
                   'soccer',
                   'worldnews']
 
-    for element in out:
-        results.append([element[0], categories[element[1]]])
+    for id, element in zip(ids, out):
+        results.append([id, categories[element]])
 
     with open(results_file, "w") as f:
         writer = csv.writer(f)
@@ -294,7 +296,7 @@ if __name__ == '__main__':
     train_naive_bayes(cd, nb)
 
     # Classify the test data.
-    classify_test_data(cd, nb, "results/naive_bayes_final_results.csv")
+    classify_test_data(cd, nb, "results/nb_predictions2.csv")
     # plot_max_train_size(3)
     # plot_feature_size(3)
 

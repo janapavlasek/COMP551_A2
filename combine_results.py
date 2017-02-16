@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+import csv
+from collections import Counter
+
+
+def get_results_from_csv(in_file):
+    with open(in_file, 'rb') as f:
+        reader = csv.reader(f)
+        data = list(reader)
+
+    data.pop(0)
+
+    return [categories_map[x[1]] for x in data]
+
+
+def append_column(x, col):
+    for i, element in enumerate(col):
+        if type(x[i]) == int:
+            x[i] = [x[i]]
+        x[i].append(element)
+
+    return x
+
+
+if __name__ == '__main__':
+    categories_map = {'hockey': 0,
+                      'movies': 1,
+                      'nba': 2,
+                      'news': 3,
+                      'nfl': 4,
+                      'politics': 5,
+                      'soccer': 6,
+                      'worldnews': 7}
+    categories = ['hockey',
+                  'movies',
+                  'nba',
+                  'news',
+                  'nfl',
+                  'politics',
+                  'soccer',
+                  'worldnews']
+    predictions = []
+    all_data = get_results_from_csv("results/svm_predictions1.csv")
+    all_data = append_column(all_data, get_results_from_csv("results/svm_predictions2.csv"))
+    all_data = append_column(all_data, get_results_from_csv("results/svm_predictions3.csv"))
+    all_data = append_column(all_data, get_results_from_csv("results/nb_predictions1.csv"))
+    all_data = append_column(all_data, get_results_from_csv("results/nb_predictions2.csv"))
+
+    for i, votes in enumerate(all_data):
+        data = Counter(votes)
+        predictions.append([i, categories[data.most_common(1)[0][0]]])
+        print votes, predictions[-1]
+
+    with open("results/combined_predictions.csv", "w") as f:
+        writer = csv.writer(f)
+        writer.writerow(["id", "category"])
+        for row in predictions:
+            writer.writerow(row)

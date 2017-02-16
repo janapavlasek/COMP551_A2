@@ -4,16 +4,16 @@ from clean_data import CleanData
 import numpy as np
 import csv
 
-cd = CleanData(tfidf=True, max_train_size=50000, max_features=8000)
+cd = CleanData(tfidf=True, max_features=2000000, n_grams=3)
 
 print 'Getting Training data.'
-training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
+X, y = cd.bag_of_words(in_file="data/clean_train_input.csv", sparse=True)
 print 'Done collecting data.'
 
-X = [x[1] for x in training_data]
-y = [y[2] for y in training_data]
+# X = [x[1] for x in training_data]
+# y = [y[2] for y in training_data]
 
-del training_data
+# del training_data
 
 print 'Training the model.'
 lin_clf = svm.LinearSVC()
@@ -26,11 +26,11 @@ print c_validation.mean()
 
 
 print 'Collecting test data.'
-test_data = cd.get_x_in()
-test = [x[1] for x in test_data]
+test = cd.get_x_in(sparse=True)
+# test = [x[1] for x in test_data]
 print 'Done collecting data.'
 
-del test_data
+# del test_data
 
 print 'Predicting results.'
 out = lin_clf.predict(test)
@@ -61,7 +61,7 @@ for i in range(0, len(out)):
 print out[0:5]
 
 print 'Writing results into CSV file'
-with open('svm_predictions.csv', 'wb') as result:
+with open('results/svm_final_predictions.csv', 'wb') as result:
     wr = csv.writer(result)
     wr.writerow(["id", "category"])
     for i, item in enumerate(out):
