@@ -1,16 +1,24 @@
 import nltk
 import pandas
 
-train_input = pandas.read_csv('data/clean_train_input.csv')
-train_output = pandas.read_csv('data/train_output.csv')
-test_input = pandas.read_csv('data/test_input.csv')
+from clean_data import CleanData
+
+#train_input = pandas.read_csv('data/clean_train_input.csv')
+#train_output = pandas.read_csv('data/train_output.csv')
+#test_input = pandas.read_csv('data/test_input.csv')
 #test_output = pandas.read_csv('test_output.csv')
 
 training_reserve = 0.7
 
+cd = CleanData(max_features=2000,tfidf=True)
+training_data = cd.bag_of_words(in_file='./data/clean_train_input.csv')
+
 #Create binary features for each word in the sentence
 def word_features(sentence):
     return dict([(word, True) for word in sentence])
+
+def features(sentence):
+    return dict([(index, word) for index,word in enumerate(sentence)])
 
 def accuracy(classifier, test):
     count_right=count_wrong = 0
@@ -26,13 +34,13 @@ def accuracy(classifier, test):
     print "Accuracy: ",float(count_right)/len(test)
     print ""
 
-train = [(word_features(nltk.word_tokenize(train_input['conversation'][i])),
-        train_output['category'][i]) for i in xrange(len(train_input))]    
+#train = [(word_features(nltk.word_tokenize(train_input['conversation'][i])),train_output['category'][i]) for i in xrange(1000)]    
+train_bow = [(features(training_data[i][1]),training_data[i][2]) for i in xrange(50000)]    
    
-train_data = train[:int(len(train)*training_reserve)]
-train_test = train[int(len(train)*training_reserve):]  
+train_data = train_bow[:int(len(train_bow)*training_reserve)]
+train_test = train_bow[int(len(train_bow)*training_reserve):]  
 
-test = [(word_features(nltk.word_tokenize(test_input['conversation'][i]))) for i in xrange(10)]
+#test = [(word_features(nltk.word_tokenize(test_input['conversation'][i]))) for i in xrange(10)]
 '''
 train = [
     (word_features(nltk.word_tokenize('I love this sandwich.')), 'pos'),
@@ -64,11 +72,11 @@ test = [
     (word_features(nltk.word_tokenize('Gary is a friend of mine.'), 'pos'),
     (word_features(nltk.word_tokenize("I can't believe I'm doing this."), 'neg')
     '''
-#import pudb; pu.db
+import pudb; pu.db
 
 nltk.usage(nltk.classify.ClassifierI)
 #classifier = nltk.classify.NaiveBayesClassifier.train(train)
-classifier = nltk.classify.DecisionTreeClassifier.train(train_data, entropy_cutoff=0,support_cutoff=0)
+classifier = nltk.classify.DecisionTreeClassifier.train(train_data[:30000], entropy_cutoff=0,support_cutoff=0)
 
 print sorted(classifier.labels())
 
