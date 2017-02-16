@@ -4,7 +4,7 @@ from clean_data import CleanData
 import numpy as np
 import csv
 
-cd = CleanData(tfidf=True, max_features=3000000, n_grams=3)
+cd = CleanData(tfidf=True, max_features=2500000, n_grams=3)
 
 print 'Getting Training data.'
 X, y = cd.bag_of_words(in_file="data/clean_train_input.csv", sparse=True)

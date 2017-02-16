@@ -2495,7 +2495,7 @@ id,category
 2493,movies
 2494,worldnews
 2495,movies
-2496,news
+2496,politics
 2497,politics
 2498,nfl
 2499,worldnews
@@ -2968,7 +2968,7 @@ id,category
 2966,politics
 2967,politics
 2968,nfl
-2969,politics
+2969,news
 2970,politics
 2971,politics
 2972,politics
@@ -3341,7 +3341,7 @@ id,category
 3339,hockey
 3340,news
 3341,nfl
-3342,news
+3342,politics
 3343,worldnews
 3344,nfl
 3345,movies
@@ -3924,7 +3924,7 @@ id,category
 3922,soccer
 3923,soccer
 3924,nba
-3925,soccer
+3925,movies
 3926,politics
 3927,movies
 3928,nba
@@ -5231,7 +5231,7 @@ id,category
 5229,hockey
 5230,worldnews
 5231,news
-5232,news
+5232,politics
 5233,nfl
 5234,worldnews
 5235,news
@@ -5873,7 +5873,7 @@ id,category
 5871,movies
 5872,politics
 5873,news
-5874,politics
+5874,news
 5875,soccer
 5876,nba
 5877,nba
@@ -6934,7 +6934,7 @@ id,category
 6932,soccer
 6933,news
 6934,news
-6935,news
+6935,politics
 6936,hockey
 6937,hockey
 6938,hockey
@@ -8421,7 +8421,7 @@ id,category
 8419,politics
 8420,soccer
 8421,politics
-8422,nba
+8422,hockey
 8423,worldnews
 8424,movies
 8425,news
@@ -9377,7 +9377,7 @@ id,category
 9375,nba
 9376,movies
 9377,movies
-9378,worldnews
+9378,news
 9379,hockey
 9380,movies
 9381,movies
@@ -10659,7 +10659,7 @@ id,category
 10657,nba
 10658,movies
 10659,hockey
-10660,nfl
+10660,news
 10661,worldnews
 10662,nba
 10663,soccer
@@ -11006,7 +11006,7 @@ id,category
 11004,nba
 11005,nba
 11006,soccer
-11007,news
+11007,worldnews
 11008,nfl
 11009,news
 11010,nba
@@ -11312,7 +11312,7 @@ id,category
 11310,worldnews
 11311,soccer
 11312,soccer
-11313,news
+11313,politics
 11314,nfl
 11315,soccer
 11316,news
@@ -11784,7 +11784,7 @@ id,category
 11782,nfl
 11783,worldnews
 11784,news
-11785,politics
+11785,news
 11786,nba
 11787,nba
 11788,soccer
@@ -12808,7 +12808,7 @@ id,category
 12806,movies
 12807,hockey
 12808,politics
-12809,news
+12809,politics
 12810,movies
 12811,politics
 12812,movies
@@ -12933,7 +12933,7 @@ id,category
 12931,hockey
 12932,nba
 12933,soccer
-12934,politics
+12934,news
 12935,movies
 12936,soccer
 12937,nba
@@ -12954,7 +12954,7 @@ id,category
 12952,soccer
 12953,movies
 12954,hockey
-12955,nba
+12955,soccer
 12956,news
 12957,nfl
 12958,news
@@ -13103,7 +13103,7 @@ id,category
 13101,worldnews
 13102,politics
 13103,nba
-13104,worldnews
+13104,news
 13105,politics
 13106,worldnews
 13107,nba
@@ -13161,7 +13161,7 @@ id,category
 13159,worldnews
 13160,news
 13161,politics
-13162,news
+13162,politics
 13163,soccer
 13164,hockey
 13165,soccer
@@ -13763,7 +13763,7 @@ id,category
 13761,soccer
 13762,news
 13763,news
-13764,worldnews
+13764,soccer
 13765,worldnews
 13766,hockey
 13767,hockey
@@ -14664,7 +14664,7 @@ id,category
 14662,movies
 14663,politics
 14664,news
-14665,politics
+14665,worldnews
 14666,movies
 14667,worldnews
 14668,movies
@@ -15090,7 +15090,7 @@ id,category
 15088,worldnews
 15089,soccer
 15090,hockey
-15091,nfl
+15091,hockey
 15092,nfl
 15093,worldnews
 15094,movies
@@ -15157,7 +15157,7 @@ id,category
 15155,worldnews
 15156,news
 15157,hockey
-15158,news
+15158,politics
 15159,news
 15160,worldnews
 15161,soccer
@@ -15831,7 +15831,7 @@ id,category
 15829,worldnews
 15830,hockey
 15831,nfl
-15832,nfl
+15832,news
 15833,soccer
 15834,worldnews
 15835,politics
@@ -17040,7 +17040,7 @@ id,category
 17038,nba
 17039,movies
 17040,nfl
-17041,politics
+17041,news
 17042,politics
 17043,movies
 17044,soccer
@@ -17518,7 +17518,7 @@ id,category
 17516,worldnews
 17517,news
 17518,worldnews
-17519,politics
+17519,news
 17520,hockey
 17521,worldnews
 17522,hockey
@@ -18177,7 +18177,7 @@ id,category
 18175,hockey
 18176,soccer
 18177,movies
-18178,news
+18178,politics
 18179,politics
 18180,soccer
 18181,movies
@@ -18590,7 +18590,7 @@ id,category
 18588,soccer
 18589,nba
 18590,worldnews
-18591,movies
+18591,news
 18592,news
 18593,nfl
 18594,hockey
@@ -18742,7 +18742,7 @@ id,category
 18740,news
 18741,news
 18742,movies
-18743,politics
+18743,news
 18744,nba
 18745,nfl
 18746,nfl
@@ -18922,7 +18922,7 @@ id,category
 18920,nfl
 18921,nba
 18922,soccer
-18923,worldnews
+18923,nba
 18924,movies
 18925,worldnews
 18926,movies
@@ -19001,7 +19001,7 @@ id,category
 18999,politics
 19000,hockey
 19001,news
-19002,worldnews
+19002,politics
 19003,soccer
 19004,hockey
 19005,politics
@@ -20085,7 +20085,7 @@ id,category
 20083,soccer
 20084,movies
 20085,movies
-20086,worldnews
+20086,news
 20087,worldnews
 20088,politics
 20089,nba
@@ -21830,7 +21830,7 @@ id,category
 21828,hockey
 21829,worldnews
 21830,soccer
-21831,soccer
+21831,nfl
 21832,nfl
 21833,nba
 21834,soccer
@@ -22319,7 +22319,7 @@ id,category
 22317,hockey
 22318,soccer
 22319,nfl
-22320,news
+22320,politics
 22321,politics
 22322,nba
 22323,politics
@@ -22354,7 +22354,7 @@ id,category
 22352,nba
 22353,hockey
 22354,movies
-22355,news
+22355,worldnews
 22356,movies
 22357,news
 22358,news
@@ -22450,7 +22450,7 @@ id,category
 22448,movies
 22449,news
 22450,movies
-22451,nfl
+22451,politics
 22452,nba
 22453,movies
 22454,politics
@@ -23669,7 +23669,7 @@ id,category
 23667,soccer
 23668,politics
 23669,nba
-23670,politics
+23670,news
 23671,movies
 23672,hockey
 23673,soccer
@@ -25851,7 +25851,7 @@ id,category
 25849,soccer
 25850,soccer
 25851,news
-25852,politics
+25852,news
 25853,nfl
 25854,nfl
 25855,movies
@@ -26256,7 +26256,7 @@ id,category
 26254,movies
 26255,worldnews
 26256,worldnews
-26257,news
+26257,politics
 26258,nba
 26259,soccer
 26260,nba
@@ -26603,13 +26603,13 @@ id,category
 26601,nba
 26602,nfl
 26603,movies
-26604,politics
+26604,news
 26605,soccer
 26606,politics
 26607,news
 26608,nfl
 26609,hockey
-26610,worldnews
+26610,news
 26611,politics
 26612,news
 26613,nba
@@ -26624,7 +26624,7 @@ id,category
 26622,movies
 26623,hockey
 26624,movies
-26625,news
+26625,politics
 26626,politics
 26627,nfl
 26628,movies
@@ -27420,7 +27420,7 @@ id,category
 27418,nfl
 27419,nba
 27420,hockey
-27421,worldnews
+27421,news
 27422,nba
 27423,news
 27424,soccer
@@ -28472,7 +28472,7 @@ id,category
 28470,politics
 28471,politics
 28472,nba
-28473,worldnews
+28473,politics
 28474,worldnews
 28475,politics
 28476,movies
@@ -28880,7 +28880,7 @@ id,category
 28878,hockey
 28879,soccer
 28880,politics
-28881,nba
+28881,nfl
 28882,hockey
 28883,soccer
 28884,hockey
@@ -28927,7 +28927,7 @@ id,category
 28925,hockey
 28926,hockey
 28927,politics
-28928,news
+28928,nfl
 28929,nba
 28930,movies
 28931,soccer
@@ -29443,7 +29443,7 @@ id,category
 29441,movies
 29442,worldnews
 29443,news
-29444,news
+29444,politics
 29445,news
 29446,soccer
 29447,movies
@@ -30325,7 +30325,7 @@ id,category
 30323,nfl
 30324,news
 30325,news
-30326,nfl
+30326,hockey
 30327,nfl
 30328,nba
 30329,hockey
@@ -30364,7 +30364,7 @@ id,category
 30362,politics
 30363,nba
 30364,worldnews
-30365,news
+30365,politics
 30366,worldnews
 30367,politics
 30368,news
@@ -30588,7 +30588,7 @@ id,category
 30586,hockey
 30587,worldnews
 30588,politics
-30589,news
+30589,worldnews
 30590,nfl
 30591,movies
 30592,movies
@@ -31393,7 +31393,7 @@ id,category
 31391,hockey
 31392,hockey
 31393,politics
-31394,nba
+31394,nfl
 31395,soccer
 31396,worldnews
 31397,nba
@@ -32091,7 +32091,7 @@ id,category
 32089,nfl
 32090,politics
 32091,worldnews
-32092,worldnews
+32092,news
 32093,movies
 32094,politics
 32095,worldnews
@@ -32113,7 +32113,7 @@ id,category
 32111,politics
 32112,movies
 32113,soccer
-32114,worldnews
+32114,hockey
 32115,soccer
 32116,nfl
 32117,hockey
@@ -32887,7 +32887,7 @@ id,category
 32885,politics
 32886,hockey
 32887,hockey
-32888,politics
+32888,news
 32889,soccer
 32890,nfl
 32891,news
@@ -34835,7 +34835,7 @@ id,category
 34833,nba
 34834,worldnews
 34835,politics
-34836,hockey
+34836,nfl
 34837,soccer
 34838,soccer
 34839,nfl
@@ -35577,7 +35577,7 @@ id,category
 35575,hockey
 35576,politics
 35577,movies
-35578,news
+35578,movies
 35579,worldnews
 35580,movies
 35581,nba
@@ -35835,7 +35835,7 @@ id,category
 35833,hockey
 35834,politics
 35835,news
-35836,news
+35836,nba
 35837,worldnews
 35838,movies
 35839,nba
@@ -36038,7 +36038,7 @@ id,category
 36036,news
 36037,movies
 36038,movies
-36039,news
+36039,politics
 36040,soccer
 36041,soccer
 36042,nfl
@@ -36259,7 +36259,7 @@ id,category
 36257,worldnews
 36258,worldnews
 36259,movies
-36260,soccer
+36260,hockey
 36261,worldnews
 36262,worldnews
 36263,soccer
@@ -37058,7 +37058,7 @@ id,category
 37056,hockey
 37057,hockey
 37058,soccer
-37059,worldnews
+37059,movies
 37060,hockey
 37061,news
 37062,nba
@@ -37157,10 +37157,10 @@ id,category
 37155,hockey
 37156,nba
 37157,worldnews
-37158,nba
+37158,nfl
 37159,worldnews
 37160,politics
-37161,worldnews
+37161,politics
 37162,soccer
 37163,worldnews
 37164,hockey
@@ -38966,7 +38966,7 @@ id,category
 38964,news
 38965,worldnews
 38966,politics
-38967,politics
+38967,worldnews
 38968,news
 38969,politics
 38970,movies
@@ -40581,7 +40581,7 @@ id,category
 40579,worldnews
 40580,nfl
 40581,politics
-40582,news
+40582,worldnews
 40583,soccer
 40584,soccer
 40585,nba
@@ -41312,7 +41312,7 @@ id,category
 41310,nba
 41311,politics
 41312,soccer
-41313,news
+41313,politics
 41314,news
 41315,nba
 41316,nfl
@@ -41814,7 +41814,7 @@ id,category
 41812,soccer
 41813,worldnews
 41814,nba
-41815,worldnews
+41815,politics
 41816,movies
 41817,news
 41818,soccer
@@ -41999,7 +41999,7 @@ id,category
 41997,movies
 41998,nfl
 41999,politics
-42000,politics
+42000,news
 42001,worldnews
 42002,politics
 42003,movies
@@ -42206,7 +42206,7 @@ id,category
 42204,soccer
 42205,soccer
 42206,nba
-42207,nfl
+42207,soccer
 42208,nba
 42209,movies
 42210,movies
@@ -42728,7 +42728,7 @@ id,category
 42726,nfl
 42727,soccer
 42728,nba
-42729,news
+42729,worldnews
 42730,news
 42731,hockey
 42732,hockey
@@ -43484,7 +43484,7 @@ id,category
 43482,news
 43483,news
 43484,news
-43485,hockey
+43485,nfl
 43486,nfl
 43487,nfl
 43488,movies
@@ -43779,7 +43779,7 @@ id,category
 43777,politics
 43778,worldnews
 43779,hockey
-43780,politics
+43780,news
 43781,politics
 43782,soccer
 43783,worldnews
@@ -44416,7 +44416,7 @@ id,category
 44414,soccer
 44415,worldnews
 44416,soccer
-44417,news
+44417,politics
 44418,nfl
 44419,hockey
 44420,movies
@@ -46217,7 +46217,7 @@ id,category
 46215,nba
 46216,movies
 46217,news
-46218,news
+46218,worldnews
 46219,news
 46220,hockey
 46221,movies
@@ -46524,7 +46524,7 @@ id,category
 46522,hockey
 46523,news
 46524,nba
-46525,news
+46525,worldnews
 46526,news
 46527,movies
 46528,hockey
@@ -49070,7 +49070,7 @@ id,category
 49068,movies
 49069,news
 49070,politics
-49071,politics
+49071,news
 49072,worldnews
 49073,movies
 49074,soccer
@@ -49140,7 +49140,7 @@ id,category
 49138,nfl
 49139,worldnews
 49140,politics
-49141,worldnews
+49141,news
 49142,news
 49143,worldnews
 49144,nfl
@@ -49499,7 +49499,7 @@ id,category
 49497,nfl
 49498,worldnews
 49499,soccer
-49500,worldnews
+49500,soccer
 49501,nba
 49502,worldnews
 49503,news
@@ -50080,7 +50080,7 @@ id,category
 50078,worldnews
 50079,news
 50080,soccer
-50081,worldnews
+50081,news
 50082,worldnews
 50083,politics
 50084,worldnews
@@ -51434,7 +51434,7 @@ id,category
 51432,news
 51433,hockey
 51434,soccer
-51435,politics
+51435,news
 51436,soccer
 51437,worldnews
 51438,movies
@@ -51982,7 +51982,7 @@ id,category
 51980,nfl
 51981,movies
 51982,hockey
-51983,news
+51983,politics
 51984,movies
 51985,hockey
 51986,nba
@@ -52265,7 +52265,7 @@ id,category
 52263,worldnews
 52264,worldnews
 52265,news
-52266,worldnews
+52266,movies
 52267,politics
 52268,politics
 52269,news
@@ -52574,7 +52574,7 @@ id,category
 52572,movies
 52573,politics
 52574,news
-52575,hockey
+52575,politics
 52576,soccer
 52577,movies
 52578,politics
@@ -52890,7 +52890,7 @@ id,category
 52888,soccer
 52889,soccer
 52890,hockey
-52891,movies
+52891,news
 52892,news
 52893,news
 52894,politics
