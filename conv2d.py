@@ -13,8 +13,8 @@ max_features = 5000
 train_time = 1
 num_batches = 10
 training_reserve = 0.8
-subset = 10000
-max_length = 100
+subset = 100           #max number of sample conversations
+max_length = 400         #max string length
 
 def create_trainer(network,input_var,y):
 	print ("Creating Trainer...")
@@ -44,15 +44,15 @@ def create_network(shape=(None,None,None,None),input_var=T.tensor3()):
 	network= lasagne.layers.InputLayer(shape=shape,input_var=input_var)
 
 
-	network = lasagne.layers.Conv2DLayer(network, num_filters=20, filter_size=(3,3), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
+	network = lasagne.layers.Conv2DLayer(network, num_filters=256, filter_size=(7,7), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
 	network = lasagne.layers.MaxPool2DLayer(network,pool_size=(2,2))
 	print '	',lasagne.layers.get_output_shape(network)
 
-	network = lasagne.layers.Conv2DLayer(network, num_filters=20, filter_size=(3,3), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
+	network = lasagne.layers.Conv2DLayer(network, num_filters=256, filter_size=(7,7), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
 	network = lasagne.layers.MaxPool2DLayer(network,pool_size=(2,2))
 	print '	',lasagne.layers.get_output_shape(network)
 
-	network = lasagne.layers.Conv2DLayer(network, num_filters=20, filter_size=(3,3), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
+	network = lasagne.layers.Conv2DLayer(network, num_filters=256, filter_size=(3,3), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
 	network = lasagne.layers.MaxPool2DLayer(network,pool_size=(2,2))
 	print '	',lasagne.layers.get_output_shape(network)
 
@@ -64,7 +64,10 @@ def create_network(shape=(None,None,None,None),input_var=T.tensor3()):
 	#network = lasagne.layers.MaxPool1DLayer(network,pool_size=(2))
 	#print '	',lasagne.layers.get_output_shape(network)
 
-	network = lasagne.layers.DenseLayer(network,num_units=500,nonlinearity=lasagne.nonlinearities.rectify)
+	network = lasagne.layers.DenseLayer(network,num_units=1024,nonlinearity=lasagne.nonlinearities.rectify)
+	print '	',lasagne.layers.get_output_shape(network)
+
+	network = lasagne.layers.DenseLayer(network,num_units=1024,nonlinearity=lasagne.nonlinearities.rectify)
 	print '	',lasagne.layers.get_output_shape(network)
 
 	network = lasagne.layers.DenseLayer(network,num_units=8,nonlinearity=lasagne.nonlinearities.softmax)
@@ -73,11 +76,11 @@ def create_network(shape=(None,None,None,None),input_var=T.tensor3()):
 
 print ('Getting data...')
 train_input = pandas.read_csv('./data/clean_train_input.csv')
-#train_output = pandas.read_csv('./data/train_output.csv')
+train_output = pandas.read_csv('./data/train_output.csv')
 #test_input = pandas.read_csv('./data/test_input.csv')
 
 alphabet = [' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-
+category = {'hockey': 0,'movies': 1,'nba': 2,'news': 3,'nfl': 4,'politics': 5,'soccer': 6,'worldnews': 7}
 def get_2drep(in_string):
 	temp = numpy.zeros((max_length,len(alphabet)))
 	for index,ch in enumerate(in_string[:max_length]):
@@ -86,6 +89,7 @@ def get_2drep(in_string):
 
 
 train_input = train_input['conversation'][:subset]
+train_output = train_output['category'][:subset]
 
 new_train = numpy.array(numpy.zeros((1,max_length,len(alphabet))),dtype='float32')
 for sentence in train_input:
@@ -93,22 +97,21 @@ for sentence in train_input:
 X = new_train[1:]
 
 
-
-cd = CleanData(max_features=1,tfidf=False)
-y_data = cd.bag_of_words(in_file='./data/clean_train_input.csv')
+#cd = CleanData(max_features=1,tfidf=False)
+#y_data = cd.bag_of_words(in_file='./data/clean_train_input.csv')
  
 #X = numpy.array([x[1] for x in train_data],dtype='float32')
-y = numpy.array([y[2] for y in y_data],dtype='float32')
+#y = numpy.array([y[2] for y in y_data],dtype='float32')
 
-
-y = y[:subset]
 
 new_y = numpy.array([numpy.zeros(8)],dtype='float32')
-for categ in y:
+for categ in train_output:
 	temp = numpy.array([numpy.zeros(8)],dtype='float32')
-	numpy.put(temp,int(categ),1)
+	numpy.put(temp,category[categ],1)
 	new_y = numpy.concatenate((new_y,temp),axis=0)
 new_y = new_y[1:]
+
+
 
 train_data = X[:int(X.shape[0]*training_reserve)]
 train_truth = new_y[:int(new_y.shape[0]*training_reserve)]
@@ -127,12 +130,11 @@ network = create_network(shape=(None,1,train_data.shape[1],train_data.shape[2]),
 trainer = create_trainer(network,input_x,truth_y)
 validator = create_validator(network,input_x,truth_y)
 
-
 '''
 out = lasagne.layers.get_output(network)
 fn = theano.function([input_x],out)
-train_in = train_data.reshape([train_data.shape[0]] + [1] + [train_data.shape[1]])
-trainer(train_in[:1000], train_truth[:1000])
+train_in = train_data.reshape([train_data.shape[0]] + [1] + [train_data.shape[1],train_data.shape[2]])
+trainer(train_in, train_truth)
 error, accuracy = validator(train_in, train_truth)	
 '''
 
