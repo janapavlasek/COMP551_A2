@@ -13,8 +13,8 @@ max_features = 5000
 train_time = 1
 num_batches = 10
 training_reserve = 0.8
-subset = 1000           #max number of sample conversations
-max_length = 300         #max string length
+subset = 100000           #max number of sample conversations
+max_length = 400         #max string length
 
 def create_trainer(network,input_var,y):
 	print ("Creating Trainer...")
@@ -48,7 +48,7 @@ def create_network(shape=(None,None,None,None),input_var=T.tensor3()):
 	network = lasagne.layers.MaxPool2DLayer(network,pool_size=(2,2))
 	print '	',lasagne.layers.get_output_shape(network)
 
-	network = lasagne.layers.Conv2DLayer(network, num_filters=256, filter_size=(3,3), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
+	network = lasagne.layers.Conv2DLayer(network, num_filters=256, filter_size=(7,7), pad ='same',nonlinearity=lasagne.nonlinearities.rectify)
 	network = lasagne.layers.MaxPool2DLayer(network,pool_size=(2,2))
 	print '	',lasagne.layers.get_output_shape(network)
 
@@ -130,7 +130,6 @@ network = create_network(shape=(None,1,train_data.shape[1],train_data.shape[2]),
 trainer = create_trainer(network,input_x,truth_y)
 validator = create_validator(network,input_x,truth_y)
 
-import pudb; pu.db
 '''
 out = lasagne.layers.get_output(network)
 fn = theano.function([input_x],out)
