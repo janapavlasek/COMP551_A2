@@ -62,7 +62,7 @@ class NaiveBayes(object):
         # Iterate through each value of the dataset.
         for element in X:
             probs = []
-            # Put the features into a useable array form.
+            # Put the features into a usable array form.
             x_i = np.matrix(element).T
             # Iterate through each class and find the probability that the
             # given feature array represents an element of that class.
