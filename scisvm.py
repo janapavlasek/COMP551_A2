@@ -4,40 +4,38 @@ from clean_data import CleanData
 import numpy as np
 import csv
 
+# Initialize data for final submission.
 cd = CleanData(tfidf=True, max_features=2500000, n_grams=3)
 
+# Geat features and output.
 print 'Getting Training data.'
 X, y = cd.bag_of_words(in_file="data/clean_train_input.csv", sparse=True)
 print 'Done collecting data.'
 
-# X = [x[1] for x in training_data]
-# y = [y[2] for y in training_data]
-
-# del training_data
-
+# Train.
 print 'Training the model.'
 lin_clf = svm.LinearSVC()
 lin_clf.fit(X, y)
 print 'Done training.'
 
+# 3-fold cross validation.
 print 'Cross Validation'
 c_validation = cross_val_score(lin_clf, X, y, scoring='accuracy')
 print c_validation.mean()
 
-
+# Get and predict on the final test data.
 print 'Collecting test data.'
 test = cd.get_x_in(sparse=True)
-# test = [x[1] for x in test_data]
 print 'Done collecting data.'
-
-# del test_data
 
 print 'Predicting results.'
 out = lin_clf.predict(test)
 print 'Done predicitng.'
 
+# Clean up to conserve memory.
 del test, lin_clf, X, y, c_validation
 
+# Format and save the files.
 out = np.array(out).tolist()
 
 for i in range(0, len(out)):
@@ -57,8 +55,6 @@ for i in range(0, len(out)):
         out[i] = 'soccer'
     if out[i] == 7:
         out[i] = 'worldnews'
-
-print out[0:5]
 
 out_file = 'results/svm_final_predictions.csv'
 

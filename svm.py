@@ -1,25 +1,27 @@
 import numpy as np
 import cvxopt
 
+
 class LinearKernel(object):
 
     ''' Implement linear kernel
     '''
     def linear_kernel():
-        def lin(X,y):
-            return np.inner(X,y)
+        def lin(X, y):
+            return np.inner(X, y)
         return lin
+
 
 class TrainSVM(object):
 
     ''' The methods in this class will
         be used to train our SVM
     '''
-    def __init__(self,kernel,c):
+    def __init__(self, kernel, c):
         self.kernel = LinearKernel.linear_kernel()
         self.c = c
-        
-    def gram_matrix(self,X):
+
+    def gram_matrix(self, X):
 
         ''' Compute the gram matrix
         '''
@@ -28,10 +30,10 @@ class TrainSVM(object):
 
         for j, x_o in enumerate(X):
             for i, y_o in enumerate(X):
-                Z[j,i] = self.kernel(x_o, y_o)
+                Z[j, i] = self.kernel(x_o, y_o)
         return Z
 
-    def multipliers(self,X,y):
+    def multipliers(self, X, y):
 
         '''Compute Lagrangian Multipliers
         '''
@@ -62,17 +64,17 @@ class TrainSVM(object):
             Given a set of training features X and training output y,
             we return an SVM predictive model
         '''
-        lagrangian = self.multipliers(X,y)
-        return self.predict(X,y,lagrangian)
+        lagrangian = self.multipliers(X, y)
+        return self.predict(X, y, lagrangian)
 
     def predict(self, X, y, lagrangian):
-
         s_mult = lagrangian[s_v_i]
         s_v = X[s_v_i]
         s_v_l = y[s_v_i]
 
-        bias = np.mean([y_i - PredictSVM(bias=0.0,weights=s_mult,s_vectors=s_v,s_v_l=s_v_l).predict(x_i) for (y_i,x_i) in zip(s_v_l,s_v)])
-        return PredictSVM(bias=bias,weights=s_mult,s_vectors=s_v,s_v_l=s_v_l,kernel=self.kernel)
+        bias = np.mean([y_i - PredictSVM(bias=0.0, weights=s_mult, s_vectors=s_v, s_v_l=s_v_l).predict(x_i) for (y_i,x_i) in zip(s_v_l,s_v)])
+        return PredictSVM(bias=bias, weights=s_mult, s_vectors=s_v, s_v_l=s_v_l, kernel=self.kernel)
+
 
 class PredictSVM(object):
 
@@ -80,7 +82,7 @@ class PredictSVM(object):
         resuts for new input data
     '''
 
-    def __init__(self,weights,bias,s_vectors,s_v_l,kernel):
+    def __init__(self, weights, bias, s_vectors, s_v_l, kernel):
 
         self.weights = weights
         self.bias = bias
@@ -95,8 +97,8 @@ class PredictSVM(object):
 
         final = self.bias
 
-        for x_i, y_i, z_i in zip(self.weights, self.s_vectors,self.s_v_l):
+        for x_i, y_i, z_i in zip(self.weights, self.s_vectors, self.s_v_l):
 
-            final += self.kernel(y_i,X)*x_i*z_i
+            final += self.kernel(y_i, X) * x_i * z_i
 
         return np.sign(final).item()

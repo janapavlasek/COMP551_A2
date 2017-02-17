@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+"""
+This module combines the results of various algorithms and uses a voting system
+to select the final results. In the default implementation, SVM gets 3 votes
+and Naive Bayes gets 2 votes.
+"""
 import csv
 from collections import Counter
 
@@ -14,6 +19,7 @@ def get_results_from_csv(in_file):
 
 
 def append_column(x, col):
+    """Append column col onto matrix x."""
     for i, element in enumerate(col):
         if type(x[i]) == int:
             x[i] = [x[i]]
@@ -40,16 +46,19 @@ if __name__ == '__main__':
                   'soccer',
                   'worldnews']
     predictions = []
+
+    # Collect all the data.
     all_data = get_results_from_csv("results/svm_predictions1.csv")
     all_data = append_column(all_data, get_results_from_csv("results/svm_predictions2.csv"))
     all_data = append_column(all_data, get_results_from_csv("results/svm_predictions3.csv"))
     all_data = append_column(all_data, get_results_from_csv("results/nb_predictions1.csv"))
     all_data = append_column(all_data, get_results_from_csv("results/nb_predictions2.csv"))
 
+    # Calculate the number of votes for each category, and pick the category
+    # with the most votes.
     for i, votes in enumerate(all_data):
         data = Counter(votes)
         predictions.append([i, categories[data.most_common(1)[0][0]]])
-        print votes, predictions[-1]
 
     with open("results/combined_predictions.csv", "w") as f:
         writer = csv.writer(f)

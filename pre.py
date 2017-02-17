@@ -13,4 +13,4 @@ y = [y[2] for y in training_data]
 print X[0:5]
 print y[0:5]
 clf = svm.SVC()
-clf.fit(X,y)
+clf.fit(X, y)

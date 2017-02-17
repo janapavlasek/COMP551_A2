@@ -16,7 +16,12 @@ class NaiveBayes(object):
 
     def train(self, X, y):
         """Trains the Naive Bayes classifier by learning the
-        distributions of each feature."""
+        distributions of each feature.
+
+        Args:
+            X: Feature matrix.
+            y: Labels.
+        """
         self.N = len(y)
 
         # This will be an array where each row represents values for each
@@ -47,7 +52,11 @@ class NaiveBayes(object):
         self.feature_probs = probs
 
     def classify(self, X):
-        """Classify data on a previously learned Naive Bayes algorithm."""
+        """Classify data on a previously learned Naive Bayes algorithm.
+
+        Args:
+            X: Feature matrix.
+        """
         results = []
 
         # Iterate through each value of the dataset.
@@ -91,6 +100,7 @@ class NaiveBayes(object):
 
 
 def get_numpy_matrices(training_data):
+    """Converts training data into numpy matrices."""
     y_train = np.zeros(len(training_data))
     X_train = np.zeros((len(training_data), len(training_data[0][1])))
     ids = []
@@ -106,19 +116,28 @@ def get_numpy_matrices(training_data):
 
 
 def plot_max_train_size(num_iter):
-    points = [5000, 6000, 7000,   # 10, 50, 100, 500, 1000, 2000, 3000, 4000,
+    """Tests various training samples sizes and plots the error.
+
+    Args:
+        num_iter: Number of times to test for each point.
+    """
+    points = [10, 50, 100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000,
               8000, 9000, 10000, 15000, 30000]
     errors = []
     train_errors = []
 
+    # Iterate over all points defined.
     for point in points:
         print "Testing for point", point, "training examples."
         error = 0
         train_error = 0
+
+        # Repeat the test the desired number of times.
         for i in range(0, num_iter):
             cd = CleanData(tfidf=True, max_train_size=int(point / 0.6))
 
             try:
+                # Get and train data.
                 training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
 
                 ids, X, y = get_numpy_matrices(training_data)
@@ -132,6 +151,7 @@ def plot_max_train_size(num_iter):
                 nb = NaiveBayes()
                 nb.train(X_train, y_train)
 
+                # Calculate training and validation errors.
                 out = nb.classify(X_test)
                 error += nb.compute_error(out, y_test)
 
@@ -147,35 +167,41 @@ def plot_max_train_size(num_iter):
         errors.append(error / num_iter)
         train_errors.append(train_error / num_iter)
 
-    print errors
-    print train_errors
-
     # PLOT.
     plt.figure(1)
 
     plt.title("Error vs Training Examples")
     plt.xlabel("Number of training examples")
     plt.ylabel("Error")
-    plt.xscale('log')
+    # plt.xscale('log')
     plt.plot(points, errors, '-ro')
     plt.plot(points, train_errors, '-bo')
     plt.show()
 
 
 def plot_feature_size(num_iter):
+    """Tests various feature sizes and plots the error.
+
+    Args:
+        num_iter: Number of times to test for each point.
+    """
     points = [100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000,
               8000, 9000, 10000]
     errors = []
     train_errors = []
 
+    # Iterate over all points defined.
     for point in points:
         print "Testing for point", point, "features."
         error = 0
         train_error = 0
+
+        # Repeat the test the desired number of times.
         for i in range(0, num_iter):
             cd = CleanData(tfidf=True, max_train_size=25000, max_features=point)
 
             try:
+                # Get and train data.
                 training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
 
                 ids, X, y = get_numpy_matrices(training_data)
@@ -189,6 +215,7 @@ def plot_feature_size(num_iter):
                 nb = NaiveBayes()
                 nb.train(X_train, y_train)
 
+                # Calculate training and validation errors.
                 out = nb.classify(X_test)
                 error += nb.compute_error(out, y_test)
 
@@ -203,9 +230,6 @@ def plot_feature_size(num_iter):
         errors.append(error / num_iter)
         train_errors.append(train_error / num_iter)
 
-    print errors
-    print train_errors
-
     # PLOT.
     plt.figure(2)
 
@@ -219,6 +243,7 @@ def plot_feature_size(num_iter):
 
 
 def classify_test_data(cd, nb, results_file):
+    """Classify the data for final testing."""
     print "Getting the testing data."
     test_data = cd.get_x_in()
 
@@ -258,6 +283,7 @@ def classify_test_data(cd, nb, results_file):
 
 
 def train_naive_bayes(cd, nb):
+    """Train the Naive Bayes classifier and compute training error."""
     print "Getting the training data."
     training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
 
@@ -297,6 +323,8 @@ if __name__ == '__main__':
 
     # Classify the test data.
     classify_test_data(cd, nb, "results/nb_predictions2.csv")
+
+    # Tests.
     # plot_max_train_size(3)
     # plot_feature_size(3)
 

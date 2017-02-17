@@ -16,6 +16,14 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 class CleanData(object):
     """Cleans the given data into a usable form."""
     def __init__(self, max_features=5000, tfidf=False, max_train_size=None, n_grams=1):
+        """Initializes CleanData object.
+
+        Args:
+            max_features: Maximum number of features for bag of words.
+            tfidf: Uses TF/IDF features if True, count features otherwise.
+            max_train_size: If set, cuts the training data set.
+            n_grams: The value of n for n_grams.
+        """
         self.data = []
         self.max_train_size = max_train_size
         self.categories = {'hockey': 0,
@@ -70,6 +78,14 @@ class CleanData(object):
                     writer.writerow(row)
 
     def clean_post(self, post):
+        """Apply various cleaning rules to a post.
+
+        Args:
+            post: A string containing text to clean.
+
+        Returns:
+            Cleaned post as string.
+        """
         # Remove the tags.
         post = re.sub(r'<.+?>', "", post)
 
@@ -104,14 +120,25 @@ class CleanData(object):
     def bag_of_words(self, in_file=None, y_file="data/train_output.csv", sparse=False):
         """Returns the bag of words training set in the form of a list of
         tuples, with tuples of the form:
-            (ID, [features], category).
+
+            (ID, [features], category)
+
         If the in_file arg is set, the original post data will be loaded from
-        a CSV file.
+        a CSV file. If sparse is true, the X and y matrices, with X as a sparse
+        matrix, are returned.
 
         Use this if you do not wish to run clean_data (recommended if you
         haven't made any changes). You probably want the in_file to be
-        data/clean_train_input.csv."""
+        data/clean_train_input.csv.
 
+        Args:
+            in_file: Input file containing the cleaned data. If left blank, the
+                     saved data will be used.
+            y_file: File in which to save the output. If left blank, output will
+                    not be saved to a file.
+            sparse: If True, the data returned will be X, y where X is a sparse
+                    matrix, instead of the form above.
+        """
         # Create the bag of words list.
         if in_file is not None:
             with open(in_file, 'rb') as f:
@@ -183,6 +210,17 @@ class CleanData(object):
         return data
 
     def get_x_in(self, in_file="data/clean_test_input.csv", sparse=False):
+        """Gets the test data for prediction in the correct form:
+
+                (ID, [features])
+
+        The data is a list of such tuples. If sparse is True, returns a sparse
+        matrix of features.
+
+        Args:
+            in_file: The CSV file containing the test data.
+            sparse: If true, a sparse feature matrix is returned.
+        """
         if not self.check_existance(in_file):
             return
 
@@ -199,6 +237,7 @@ class CleanData(object):
         # Get bag of words features.
         features = self.vectorizer.transform(posts)
 
+        # Return just the sparse matrix if the flag is set.
         if sparse:
             return features
 
@@ -213,6 +252,7 @@ class CleanData(object):
         return bow
 
     def check_existance(self, path):
+        """Check whether a path exists and print a warning if not."""
         if not os.path.exists(path):
             print "File", path, "does not exist. You need to run clean_data with this path as the out_file."
             return False

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import numpy as np
 import matplotlib.pyplot as plt
 from clean_data import CleanData
 from sklearn.neighbors import KNeighborsClassifier
@@ -28,22 +27,13 @@ def compute_error(Y, Y_expect):
     return count / float(len(Y))
 
 
-def get_numpy_matrices(training_data):
-    y_train = np.zeros(len(training_data))
-    X_train = np.zeros((len(training_data), len(training_data[0][1])))
-    ids = []
-
-    idx = 0
-    while not len(training_data) == 0:
-        ids.append(training_data[0][1])
-        y_train[idx] = training_data[0][2]
-        X_train[idx] = training_data.pop(0)[1]
-        idx += 1
-
-    return ids, X_train, y_train
-
-
 def plot_k(cd, num_iter):
+    """Tests various values of k and plots the error.
+
+    Args:
+        cd: CleanData instance.
+        num_iter: Number of times to test for each point.
+    """
     points = [3, 5, 10, 15, 20]
     errors = []
     train_errors = []
@@ -54,21 +44,22 @@ def plot_k(cd, num_iter):
         train_error = 0
 
         for i in range(0, num_iter):
-
             nn = KNeighborsClassifier(point, weights='uniform')
 
+            # Get the features.
             X, y = cd.bag_of_words(in_file="data/clean_train_input.csv", sparse=True)
 
-            # nn.fit(X, y)
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
-            # print "Error:", c_validation.mean()
 
+            # Train on the training set.
             nn.fit(X_train, y_train)
 
+            # Calculate validation error.
             print "Predicting on validation set."
             out = nn.predict(X_test)
             error += compute_error(out, y_test)
 
+            # Calculate training error.
             print "Predicting on training set."
             train_out = nn.predict(X_train)
             train_error += compute_error(train_out, y_train)
@@ -78,9 +69,6 @@ def plot_k(cd, num_iter):
         print point, "Training:", train_error / num_iter, "Validation:", error / num_iter
         errors.append(error / num_iter)
         train_errors.append(train_error / num_iter)
-
-    print errors
-    print train_errors
 
     # PLOT.
     plt.figure(2)
@@ -94,33 +82,5 @@ def plot_k(cd, num_iter):
 
 
 if __name__ == '__main__':
-    cd = CleanData(tfidf=True, max_train_size=30000, max_features=5000)  # 15000, 7000
-
-    # n_neighbours = 15
-    # nn = KNeighborsClassifier(n_neighbours, weights='uniform')  # weights: 'uniform', 'distance'
-
-    # print "Getting the training data."
-    # training_data = cd.bag_of_words(in_file="data/clean_train_input.csv")
-
-    # y_train = np.zeros(len(training_data))
-    # X_train = np.zeros((len(training_data), len(training_data[0][1])))
-
-    # idx = 0
-    # while not len(training_data) == 0:
-    #     y_train[idx] = training_data[0][2]
-    #     X_train[idx] = training_data.pop(0)[1]
-    #     idx += 1
-
-    # del training_data
-
-    # print "Done getting training data."
-
-    # print "Training..."
-    # nn.fit(X_train, y_train)
-
-    # print "Classifying..."
-    # results = nn.predict(X_train)
-
-    # print "Training error:", compute_error(results, y_train)
-
+    cd = CleanData(tfidf=True, max_train_size=30000, max_features=5000)
     plot_k(cd, 1)
