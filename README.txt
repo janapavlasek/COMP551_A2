@@ -31,7 +31,7 @@ For running the Sci-Kit SVM model please run:
     python scisvm.py
 
 For running the Nearest Neighbour model please run:
-    python nearesy_neighbour.py
+    python nearest_neighbour.py
 
 For running the Decision Tree model please run:
     python decision_tree.py
