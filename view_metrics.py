@@ -4,22 +4,13 @@ import pylab #for graphing
 import pickle
 import sys
 
-data = {}
-modelName = "Emily2Layer300000stats.pickle"
+modelName = "stats.pickle"
 if len(sys.argv) > 1:
 	modelName = sys.argv[1]
 with open('%s'%modelName) as infile:
 	if '.pickle' in modelName:
 		data = pickle.load(infile)
-	elif '.json' in modelName:
-		data = json.loads(infile)
-		data = data['data']
-		for key in data.keys():
-			data[key] = numpy.array(data[key],dtype='float32')
-'''
-for key in data.keys():
-	data[key] = numpy.array(data[key],dtype='float32')
-'''
+
 pylab.plot(data['epoch'],data['error'], '-ro',label='Test Error')
 pylab.plot(data['epoch'],data['accuracy'],'-go',label='Test Accuracy')
 pylab.xlabel("Epoch")
