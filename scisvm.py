@@ -3,7 +3,7 @@ from sklearn.cross_validation import cross_val_score
 from clean_data import CleanData
 import numpy as np
 import csv
-import svm
+#import svm
 
 # Initialize data for final submission.
 cd = CleanData(tfidf=True, max_features=2500000, n_grams=3)
