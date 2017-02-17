@@ -3,6 +3,7 @@ from sklearn.cross_validation import cross_val_score
 from clean_data import CleanData
 import numpy as np
 import csv
+import svm
 
 # Initialize data for final submission.
 cd = CleanData(tfidf=True, max_features=2500000, n_grams=3)
@@ -14,6 +15,10 @@ print 'Done collecting data.'
 
 # Train.
 print 'Training the model.'
+# Uncomment to train implementation of svm
+#lk = svm.LinearKernel()
+#tsvm = svm.TrainSVM(lk.linear_kernel,0.1)
+#svm.tsvm.train(X,y)
 lin_clf = svm.LinearSVC()
 lin_clf.fit(X, y)
 print 'Done training.'
