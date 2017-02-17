@@ -24,10 +24,7 @@ For running any of the models please first download:
 For running the Naive Bayes model please run:
     python naive_bayes.py
 
-For running the custom SVM model please run:
-    python svm.py
-
-For running the Sci-Kit SVM model please run:
+For running the SVM model please run:
     python scisvm.py
 
 For running the Nearest Neighbour model please run:
