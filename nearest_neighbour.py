@@ -5,6 +5,8 @@ from clean_data import CleanData
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.cross_validation import train_test_split
 
+__author__ = "Jana Pavlasek"
+
 
 def compute_error(Y, Y_expect):
     """Computes the error.

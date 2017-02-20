@@ -1,6 +1,8 @@
 import numpy as np
 import cvxopt
 
+__author__ = "Yacine Sibous"
+
 
 class LinearKernel(object):
 

@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from clean_data import CleanData
 from sklearn.cross_validation import train_test_split
 
+__author__ = "Jana Pavlasek"
+
 
 class NaiveBayes(object):
 

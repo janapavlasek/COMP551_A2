@@ -1,6 +1,8 @@
 from sklearn import svm
 from clean_data import CleanData
 
+__author__ = "Yacine Sibous"
+
 cd = CleanData()
 
 print "Getting the training data."

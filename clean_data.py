@@ -12,6 +12,8 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 # import nltk
 # nltk.download('all')
 
+__author__ = "Jana Pavlasek, Yacine Sibous"
+
 
 class CleanData(object):
     """Cleans the given data into a usable form."""

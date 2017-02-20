@@ -7,6 +7,8 @@ and Naive Bayes gets 2 votes.
 import csv
 from collections import Counter
 
+__author__ = "Jana Pavlasek"
+
 
 def get_results_from_csv(in_file):
     with open(in_file, 'rb') as f:
